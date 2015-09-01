@@ -89,3 +89,30 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+
+
+/*
+    login page
+*/
+.site-login{
+    text-align: center;
+}
+.site-login .form-group{
+    text-align: center; 
+}
+
+.site-login .form-group input{
+    width: 200px;
+    height: 25px;
+    font-family: 'Arial';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 13px;
+    text-decoration: none;
+    color: #000000;
+    display: initial;
+}
+
+#signupform-birth_date {
+    background: none;
+}

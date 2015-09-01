@@ -7,41 +7,80 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->title = 'Login';
+$this->registerJs("
+    $('#agreement_check').on('click', function(){
+        $('#signup-button').removeAttr('disabled');
+    })
+", yii\web\View::POS_READY);
+
+$this->title = 'Участовать';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div>
+        <h2>Для продолжения авторизуйся</h2>
 
-    <p>Please fill out the following fields to login:</p>
+        <?php $form = ActiveForm::begin([
+            'id' => 'login-form', 
+        ]); ?>
 
-    <?php $form = ActiveForm::begin([
-        'id' => 'login-form',
-        'options' => ['class' => 'form-horizontal'],
-        'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
-        ],
-    ]); ?>
+            <?= $form->field($loginForm, 'username', ['inputOptions' => ['placeholder' => '+7 (___) ___-__-__']])->label(false); ?>
+            <?= $form->field($loginForm, 'password', ['inputOptions' => ['placeholder' => '******']])->passwordInput()->label(false); ?>
 
-        <?= $form->field($model, 'username') ?>
-
-        <?= $form->field($model, 'password')->passwordInput() ?>
-
-        <?= $form->field($model, 'rememberMe')->checkbox([
-            'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-        ]) ?>
-
-        <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+            <div class="form-group">
+                <div class="">
+                    <?= Html::submitButton('Ок', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                </div>
             </div>
-        </div>
 
-    <?php ActiveForm::end(); ?>
+        <?php ActiveForm::end(); ?>
 
-    <div class="col-lg-offset-1" style="color:#999;">
-        You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-        To modify the username/password, please check out the code <code>app\models\User::$users</code>.
+    </div>
+    <div>
+        <h2>Или зарегистрируйся</h2>
+
+        <?php $form = ActiveForm::begin([
+            'id' => 'signup-form',
+            'fieldConfig' => [
+                'template' => "<div class=\"form-group\">{input}</div>"
+            ],
+        ]); ?>
+
+            <?= $form->field($signupForm, 'lastname', ['inputOptions' => ['placeholder' => 'Фамилия']])->label(false); ?>
+            <?= $form->field($signupForm, 'firstname', ['inputOptions' => ['placeholder' => 'Имя']])->label(false); ?>
+            <?= $form->field($signupForm,'birth_date')->widget(yii\jui\DatePicker::className(),[
+                'language' => 'ru',
+                'dateFormat' => 'dd.MM.yyyy',
+                'options' => [ 
+                    'placeholder' => 'дд.мм.гггг', 
+                    'readonly' => 'readonly', 
+                    'class' => 'form-control'
+                ],
+                'clientOptions' => [
+                    'changeMonth' => true,
+                    'changeYear' => true,
+                    'yearRange' => "-100:+0"
+                ],
+            ]) ?>
+            <?= $form->field($signupForm, 'city', ['inputOptions' => ['placeholder' => 'Город']])->label(false); ?>
+           <?= $form->field($signupForm, 'phone')->widget(\yii\widgets\MaskedInput::className(), [
+                'mask' => '+7 (999) 999-99-99',
+                'options' => ['placeholder' => '+7 (___) ___-__-__'],
+            ]) ?>
+            <div class="row">
+                <?= Html::submitButton('Подтвердить', ['class' => 'btn', 'id' => 'confirm_phone']) ?>
+            </div>
+            <br/>
+            <?= $form->field($signupForm, 'password', ['inputOptions' => ['placeholder' => 'Введите пароль']])->passwordInput()->label(false); ?>
+            <?= $form->field($signupForm, 'password_repeat', ['inputOptions' => ['placeholder' => 'Подтвердите пароль']])->passwordInput()->label(false); ?>
+            
+            <?=Html::checkbox("agreement", false, ['id'=>'agreement_check']) . " <span>Я согласен с правилами акции</span>";?>
+            <div class="form-group">
+                <div>
+                    <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-primary', 'name' => 'signup-button', 'id' => 'signup-button', 'disabled' => 'disabled']) ?>
+                </div>
+            </div>
+
+        <?php ActiveForm::end(); ?>
     </div>
 </div>
