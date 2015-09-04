@@ -7,10 +7,23 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
-$this->registerJs("
+ \yii\web\View::registerJsFile('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places');  
+
+ $this->registerJs("
     $('#agreement_check').on('click', function(){
         $('#signup-button').removeAttr('disabled');
     })
+    
+    var autocomplete = new google.maps.places.Autocomplete(document.getElementById('signupform-city'), {
+        language: 'ru',
+        componentRestrictions: {country: 'ru'},
+        types: ['(cities)']
+    });
+    autocomplete.addListener('place_changed', function(){
+        var place = autocomplete.getPlace();
+        $('#signupform-city').val(place.name);
+    });
+    
 ", yii\web\View::POS_READY);
 
 $this->title = 'Участовать';
