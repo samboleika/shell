@@ -28,9 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= $form->field($loginForm, 'password', ['inputOptions' => ['placeholder' => '******']])->passwordInput()->label(false); ?>
 
             <div class="form-group">
-                <div class="">
-                    <?= Html::submitButton('Ок', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
-                </div>
+                <?= Html::submitButton('Ок', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
             </div>
 
         <?php ActiveForm::end(); ?>
@@ -76,9 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
             
             <?=Html::checkbox("agreement", false, ['id'=>'agreement_check']) . " <span>Я согласен с правилами акции</span>";?>
             <div class="form-group">
-                <div>
-                    <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-primary', 'name' => 'signup-button', 'id' => 'signup-button', 'disabled' => 'disabled']) ?>
-                </div>
+                <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-primary', 'name' => 'signup-button', 'id' => 'signup-button', 'disabled' => 'disabled']) ?>
             </div>
 
         <?php ActiveForm::end(); ?>

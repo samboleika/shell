@@ -62,7 +62,7 @@ class SignupForm extends Model
             }
             
             if ($user->save()) {
-                return Yii::$app->user->login($user, 3600*24*30);
+                return Yii::$app->user->login($user, 3600*8);
             }
             
         }
