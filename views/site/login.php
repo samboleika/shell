@@ -1,15 +1,11 @@
 <?php
 
-/* @var $this yii\web\View */
-/* @var $form yii\bootstrap\ActiveForm */
-/* @var $model app\models\LoginForm */
-
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
- \yii\web\View::registerJsFile('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places');  
+\yii\web\View::registerJsFile('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places');  
 
- $this->registerJs("
+$this->registerJs("
     $('#agreement_check').on('click', function(){
         $('#signup-button').removeAttr('disabled');
     })

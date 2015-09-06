@@ -31,22 +31,12 @@ AppAsset::register($this);
         ],
     ]);
     $items = [
-            ['label' => 'Главная', 'url' => ['/site/index']],
-            ['label' => 'Правила', 'url' => ['/site/about']],
-            ['label' => 'Участвовать', 'url' => ['/site/login']],
-            ['label' => 'Обратная связь', 'url' => ['/site/contact']]
-        ]; 
-    
-    if(!\Yii::$app->user->isGuest){
-        if(Yii::$app->user->identity->isModerator() || Yii::$app->user->identity->isClient()){
-            $items[] = ['label' => 'Админ', 'url' => ['/admin/index']];
-        }
-        $items[] = [
-                'label' => 'Выход (' . Yii::$app->user->identity->username . ')',
-                'url' => ['/site/logout'],
-                'linkOptions' => ['data-method' => 'post']
-            ];
-    }
+            ['label' => 'Модерация работ', 'url' => ['/admin/index']],
+            ['label' => 'Еженедельный розыгрыш', 'url' => ['/admin/weekwin']],
+            ['label' => 'Главный розыгрыш', 'url' => ['/admin/mainwin']],
+            ['label' => 'Статистика', 'url' => ['/admin/statistic']],
+            ['label' => 'Акция', 'url' => ['/site/index']]
+        ];
     
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],

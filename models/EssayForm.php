@@ -31,6 +31,7 @@ class EssayForm extends Model
         $essay = new Essays;
         $essay->text = htmlentities($this->text);
         $essay->user_id = Yii::$app->user->id;
+        $essay->create_date = date("Y-m-d H:i:s");
         $photo = UploadedFile::getInstancesByName('photo');
         if(isset($photo[0]) && $photo[0]->tempName){
             $photo_name = uniqid() . '.' . $photo[0]->getExtension();

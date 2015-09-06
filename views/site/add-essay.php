@@ -13,6 +13,7 @@ $this->registerJs("
         if($(this).find('.has-error').length) {
             return false;
         }
+        $('#add-essay-button').attr('disabled', 'disabled');
         var fd = new FormData(this);
         $.ajax({
           type: 'POST',
@@ -32,6 +33,7 @@ $this->registerJs("
             else{
                 $('#essay-modal .modal-body').html('<p class=\"alert text-center\">Произошла ошибка, Ваше ессэ не добавлено!</p>');
                 $('#essay-modal').modal('show');
+                $('#add-essay-button').removeAttr('disabled');
             }
         });
         return false;

@@ -15,7 +15,8 @@ use Yii;
  */
 class Essays extends \yii\db\ActiveRecord
 {
-    const ESSAY_PHOTO_PATH = "../essay_images/";
+    const ESSAY_PHOTO_PATH = "essay_images/";
+    const ESSAY_PHOTOS_URL = "/essay_images/";
     
     /**
      * @inheritdoc
@@ -32,9 +33,10 @@ class Essays extends \yii\db\ActiveRecord
     {
         return [
             [['text'], 'required'],
-            [['user_id', 'status'], 'integer'],
+            [['user_id', 'status', 'is_nominee'], 'integer'],
             [['photo_path'], 'string', 'max' => 255],
-            [['text'], 'string', 'max' => 1000]
+            [['text'], 'string', 'max' => 1000],
+            ['create_date', 'safe'],
         ];
     }
 
@@ -51,4 +53,22 @@ class Essays extends \yii\db\ActiveRecord
             'satus' => 'Satus',
         ];
     }
+    
+    public static function getStatusName($id){
+        $statuses = [
+            1 => "Не обработано",
+            2 => "Принято",
+            3 => "Не принято"
+        ];
+        
+        return isset($statuses[$id])?$statuses[$id]:0;
+    }
+    
+    public static function getPhoto($path) {
+        $photo = self::ESSAY_PHOTO_PATH . $path;
+        if(file_exists($photo) && $path != ""){
+            return self::ESSAY_PHOTOS_URL . $path;
+        }
+        return "";
+    } 
 }

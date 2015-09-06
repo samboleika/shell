@@ -116,3 +116,58 @@ a.desc:after {
 #signupform-birth_date {
     background: none;
 }
+
+/*
+*   admins
+*/
+
+.shell-table td{
+    border-left:1px solid #dadada;
+    border-bottom:1px solid #dadada;
+}
+
+.table.shell-table > thead:first-child > tr:first-child > th{
+    text-align: center;
+    border-left:1px solid #dadada;
+    border-top:1px solid #dadada;
+}
+
+.shell-table th:last-child{
+    border-right:1px solid #dadada;
+}
+
+.shell-table td:last-child{
+    border-right:1px solid #dadada;
+}
+
+.carousel{
+    margin-top: 20px;
+    background: #fff;
+}
+
+.carousel .item{
+    background: #fff;    
+    text-align: left;
+    min-height: 200px;
+    padding: 0 25px;
+} 
+
+#adminCarousel .item img{
+    float: left;
+    max-width: 150px;
+    max-height: 150px;
+    padding: 5px 10px 5px 5px;
+}
+
+.carousel .carousel-control.left,
+.carousel .carousel-control.right{
+    background: #fff;  
+} 
+
+.carousel-control {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 20px;
+}
