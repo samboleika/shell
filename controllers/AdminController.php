@@ -33,6 +33,7 @@ class AdminController extends Controller
         ];
     }
     
+    // проверка доступа, клиент или модер
     protected function isAdmin($rule, $action) {
         if(!Yii::$app->user->isGuest && (Yii::$app->user->identity->isModerator() || Yii::$app->user->identity->isClient())) {
             return true;
@@ -48,10 +49,11 @@ class AdminController extends Controller
         ];
     }
 
+    // страница модерации работ
     public function actionIndex(){
         
         if(Yii::$app->request->isAjax && Yii::$app->request->get('changeStatus')){
-            return $this->changeStatus(Yii::$app->request->get('essay_id'), Yii::$app->request->get('status'));
+            return Essays::changeStatus(Yii::$app->request->get('essay_id'), Yii::$app->request->get('status'));
         }
         
         $user_essays = (new \yii\db\Query)
@@ -79,9 +81,11 @@ class AdminController extends Controller
         ]);
     }
     
+    //страница ежэнедельного розыгрша, выбо номинантов
     public function actionWeekwin() {    
+        //ставим статус номинант
         if(Yii::$app->request->isAjax && Yii::$app->request->get('setNominee')){
-            return $this->setNominee(Yii::$app->request->get('essay_id'));
+            return Essays::setNominee(Yii::$app->request->get('essay_id'));
         }
         
         $user_essays = (new \yii\db\Query)
@@ -120,6 +124,7 @@ class AdminController extends Controller
         
     }
     
+    //экспорт со страницы выбора номинантов
     public function actionExportweek() {
         if(Yii::$app->request->post("essay_id")){
             $user_essays = (new \yii\db\Query)
@@ -143,41 +148,72 @@ class AdminController extends Controller
         return false;
     }
     
-    protected function changeStatus($id, $status) {
-        $essay = Essays::findOne($id);
-        if(!empty($essay) && Essays::getStatusName($status)){
-            $essay->status = $status;
-            if($essay->save()){
-                return json_encode(["status" => "ok"]);
-            }
+    //страница выбора победтилей
+    public function actionMainwin() {   
+        //ставим статус победитель
+        if(Yii::$app->request->isAjax && Yii::$app->request->get('setWinner')){
+            return Essays::setWinner(Yii::$app->request->get('essay_id'));
         }
         
-        return json_encode(["status" => "error"]);
+        $user_essays = (new \yii\db\Query)
+            ->select("essays.*, users.*, essays.id as essay_id")
+            ->from("users")
+            ->rightJoin('essays', 'essays.user_id = users.id and essays.status = 2')
+            ->where(['users.type' => 1]);
+        
+        if(Yii::$app->request->post('filter_status')){
+            $user_essays->andWhere(['essays.is_nominee' => (int)Yii::$app->request->post('filter_status')]);
+        }
+        
+        if(Yii::$app->request->post('filter_week')){
+            $user_essays->rightJoin('weeks', ["weeks.id" => Yii::$app->request->post('filter_week')]);
+            $user_essays->andWhere("essays.create_date between weeks.date_start and weeks.date_end");
+        }
+        
+        if(Yii::$app->request->post('filter_firstname')){
+            $user_essays->andWhere(["firstname" => Yii::$app->request->post('filter_firstname')]);
+        }
+        
+        if(Yii::$app->request->post('filter_lastname')){
+            $user_essays->andWhere(["lastname" => Yii::$app->request->post('filter_lastname')]);
+        }
+        
+        $pages = new Pagination(['totalCount' => $user_essays->count(), 'pageSize' => 10]);
+        
+        return $this->render('main-win', [
+            'model' => $user_essays->orderBy("essays.id")->offset($pages->offset)->limit($pages->limit)->all(),
+            'filter_week' => Yii::$app->request->post('filter_week'),
+            'filter_firstname' => Yii::$app->request->post('filter_firstname'),
+            'filter_lastname' => Yii::$app->request->post('filter_lastname'),
+            'filter_status' => Yii::$app->request->post('filter_status'),
+            'pages' => $pages,
+        ]);
+        
     }
     
-    protected function setNominee($id) {
-        $essay = Essays::findOne($id);
-        
-        if(!empty($essay)){
-            $nomanees = (new \yii\db\Query)
-                ->select("count(essays.*) as count")
-                ->from("essays")
-                ->rightJoin("weeks",":date between weeks.date_start and weeks.date_end", [":date" => $essay->create_date])
-                ->where("essays.create_date  between weeks.date_start and weeks.date_end and essays.is_nominee = 1")
-                ->one();
-            
-            if(!$nomanees || $nomanees["count"] < 5){
-                $essay->is_nominee = 1;
-                if($essay->save()){
-                    return json_encode(["status" => "ok"]);
-                }
-            }
-            else{
-                return json_encode(["status" => "error", "text" => "5 номинантов уже выбрано на этой неделе"]);
-            }
+    //экспорт со страницы выбора победителей
+    public function actionExportmain() {
+        if(Yii::$app->request->post("essay_id")){
+            $user_essays = (new \yii\db\Query)
+                ->select([
+                    "users.lastname", 
+                    "users.firstname", 
+                    "users.phone", 
+                    "essays.create_date", 
+                    "essays.text", 
+                    new \yii\db\Expression("case when essays.is_winner = 1 then 'победитель' else '' end"), 
+                    new \yii\db\Expression("case when essays.photo_path = '' then '' else CONCAT('".$_SERVER['SERVER_NAME'].Essays::ESSAY_PHOTOS_URL."', essays.photo_path) end"),
+                    ])
+                ->from("users")
+                ->rightJoin('essays', 'essays.user_id = users.id and essays.status = 2')
+                ->where(['users.type' => 1])
+                ->andWhere(['IN', 'essays.id', Yii::$app->request->post("essay_id")])
+                ->all();
+            return \app\components\ShellHelper::exportCsv($user_essays);
         }
-        
-        return json_encode(["status" => "error"]);
+        print "Выберите хотя бы одну строку";
+        return false;
     }
+    
 
 }

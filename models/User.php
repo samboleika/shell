@@ -32,7 +32,7 @@ class User extends \yii\db\ActiveRecord  implements IdentityInterface
             ['city', 'string', 'max' => 255],
             [['username'], 'unique'],
             ['birth_date', 'safe'],
-            [['firstname', 'lastname', 'phone', 'city', 'username', 'birth_date'], 'filter', 'filter'=>'strip_tags']
+            [['firstname', 'lastname', 'phone', 'city', 'username', 'birth_date'], 'filter', 'filter'=>'htmlspecialchars']
         ];
     }
     

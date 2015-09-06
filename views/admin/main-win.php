@@ -6,12 +6,12 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 
 $this->registerJs('
-    $(".set_nominee").on("click", function(){
+    $(".set_winner").on("click", function(){
         var _this = $(this);
         var essay_id = $(this).closest("tr").attr("data-essay-id");
         $.ajax({
             dataType: "json",
-            data: "setNominee=1&essay_id=" + essay_id,
+            data: "setWinner=1&essay_id=" + essay_id,
             success: function(data){
                 if(!(data.status && data.status == "ok")){
                     if(data.text){
@@ -22,8 +22,8 @@ $this->registerJs('
                     return false;
                 }
                 else{
-                    _this.closest("tr").find(".td_status").html("Номинант");
-                    _this.closest("tr").find(".td_nominee").hide();
+                    _this.closest("tr").find(".td_status").html("Победитель");
+                    _this.closest("tr").find(".td_winner").hide();
                     return true;
                 }
             },
@@ -63,7 +63,7 @@ $this->registerJs('
     
 ', yii\web\View::POS_READY);
 
-$this->title = 'Еженедельный розыгрыш';
+$this->title = 'Главный розыгрыш';
 ?>
 
 <div>
@@ -82,7 +82,7 @@ $this->title = 'Еженедельный розыгрыш';
     <div class="clearfix"></div>
     <br/>
     <?php if(count($model) > 0): 
-        echo Html::beginForm(Url::to("/admin/exportweek"), 'post', ['id' => 'essays-form', 'target' => '_blank'] );
+        echo Html::beginForm(Url::to("/admin/exportmain"), 'post', ['id' => 'essays-form', 'target' => '_blank'] );
     ?>
     
         <table class="table table-hover shell-table">
@@ -105,9 +105,9 @@ $this->title = 'Еженедельный розыгрыш';
                     <td><?=$essay['phone'];?></td>
                     <td><?=date('d.m.Y H:i:s', strtotime($essay['create_date']));?></td>
                     <td class="open_essay"><?=\mb_substr($essay['text'], 0, 10, 'UTF-8');?> ...</td>
-                    <td class="open_essay td_status"><?=($essay['is_nominee'])?"Номинант":"";?></td>
+                    <td class="open_essay td_status"><?=($essay['is_winner'])?"Победитель":"";?></td>
                     <td style="border:none;border-left:1px solid #dadada"><a href="#" class="btn btn-info open_essay">Фото</a></td>
-                    <td class="td_nominee <?=($essay['is_nominee'])?"hide":"";?>" style="border:none;"><a href="#" class="btn btn-success set_nominee">Номинант</a></td>
+                    <td class="td_winner <?=($essay['is_winner'])?"hide":"";?>" style="border:none;"><a href="#" class="btn btn-success set_winner">Победитель</a></td>
                 </tr>
             <?php endforeach;?>
         </table>
