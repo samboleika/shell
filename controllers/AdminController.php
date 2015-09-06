@@ -215,5 +215,28 @@ class AdminController extends Controller
         return false;
     }
     
+    //статистика
+    public function actionStatistic() {
+        $user_essays = (new \yii\db\Query)
+            ->select([
+                new \yii\db\Expression("count(*) as allcount"),
+                new \yii\db\Expression("count(case when essays.status = 2 then 1 else null end) as confirmed"),
+                new \yii\db\Expression("count(case when essays.status = 3 then 1 else null end) as declined"),
+            ])
+            ->from("users")
+            ->rightJoin('essays', 'essays.user_id = users.id')
+            ->where(['users.type' => 1]);
+        
+        if(Yii::$app->request->post('filter_week')){
+            $user_essays->rightJoin('weeks', ["weeks.id" => Yii::$app->request->post('filter_week')]);
+            $user_essays->andWhere("essays.create_date between weeks.date_start and weeks.date_end");
+        }
+        
+        return $this->render('statistic', [
+            'model' => $user_essays->one(),
+            'filter_week' => Yii::$app->request->post('filter_week'),
+        ]);
+        
+    }
 
 }
