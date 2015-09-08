@@ -31,6 +31,7 @@ AppAsset::register($this);
         ],
     ]);
     $items = [
+            ['label' => 'Участники', 'url' => ['/admin/users']],
             ['label' => 'Модерация работ', 'url' => ['/admin/index']],
             ['label' => 'Еженедельный розыгрыш', 'url' => ['/admin/weekwin']],
             ['label' => 'Главный розыгрыш', 'url' => ['/admin/mainwin']],
