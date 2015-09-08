@@ -49,6 +49,38 @@ class AdminController extends Controller
         ];
     }
 
+    // страница участников
+    public function actionUsers(){
+		
+        $users = (new \yii\db\Query)
+            ->select("users.*")
+            ->from("users")
+            ->where(['users.type' => 1]);
+        
+        if(Yii::$app->request->post('filter_firstname')){
+            $users->andWhere(["firstname" => Yii::$app->request->post('filter_firstname')]);
+        }
+        
+        if(Yii::$app->request->post('filter_lastname')){
+            $users->andWhere(["lastname" => Yii::$app->request->post('filter_lastname')]);
+        }
+        
+        if(Yii::$app->request->post('filter_phone')){
+            $users->andWhere(["phone" => Yii::$app->request->post('filter_phone')]);
+        }
+        
+        
+        $pages = new Pagination(['totalCount' => $users->count(), 'pageSize' => 10]);
+        
+        return $this->render('users', [
+            'model' => $users->offset($pages->offset)->limit($pages->limit)->all(),
+            'filter_firstname' => Yii::$app->request->post('filter_firstname'),
+            'filter_lastname' => Yii::$app->request->post('filter_lastname'),
+            'filter_phone' => Yii::$app->request->post('filter_phone'),
+            'pages' => $pages,
+        ]);
+    }
+    
     // страница модерации работ
     public function actionIndex(){
         
