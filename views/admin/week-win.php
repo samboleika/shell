@@ -77,6 +77,8 @@ $this->title = 'Еженедельный розыгрыш';
             echo Html::textInput("filter_lastname", $filter_lastname, ["placeholder" => "Фамилия", "class" => "form-control"]);
             echo "<br/>";
             echo Html::textInput("filter_firstname", $filter_firstname, ["placeholder" => "Имя", "class" => "form-control"]);
+            echo "<br/>";
+			echo Html::submitButton("Поиск", ["class" => "btn btn-primary"]);
         echo Html::endForm();
     ?>
     <div class="clearfix"></div>
