@@ -91,6 +91,7 @@ class Essays extends \yii\db\ActiveRecord
         $essay = Essays::findOne($id);
         
         if(!empty($essay)){
+			//проверка на  кол-во уже наминированных, не больше 5 должно быть
             $nomanees = (new \yii\db\Query)
                 ->select("count(essays.*) as count")
                 ->from("essays")
@@ -98,15 +99,27 @@ class Essays extends \yii\db\ActiveRecord
                 ->where("essays.create_date  between weeks.date_start and weeks.date_end and essays.is_nominee = 1")
                 ->one();
             
-            if(!$nomanees || $nomanees["count"] < 5){
-                $essay->is_nominee = 1;
-                if($essay->save()){
-                    return json_encode(["status" => "ok"]);
-                }
-            }
-            else{
+            if($nomanees && $nomanees["count"] > 4){
                 return json_encode(["status" => "error", "text" => "5 номинантов уже выбрано на этой неделе"]);
             }
+			
+			//проверка есть ли уже номинированая работа у участника
+            $user_nomanee = (new \yii\db\Query)
+                ->select("essays.id")
+                ->from("essays")
+				->rightJoin("users", ["users.id" => $essay->user_id])
+                ->rightJoin("weeks",":date between weeks.date_start and weeks.date_end", [":date" => $essay->create_date])
+                ->where("essays.create_date  between weeks.date_start and weeks.date_end and essays.is_nominee = 1 and essays.user_id = users.id")
+                ->one();
+				
+            if(!empty($user_nomanee)){
+                return json_encode(["status" => "error", "text" => "у этого участника уже есть номинированая работа на этой неделе"]);
+            }
+			
+			$essay->is_nominee = 1;
+			if($essay->save()){
+				return json_encode(["status" => "ok"]);
+			}
         }
         
         return json_encode(["status" => "error"]);
