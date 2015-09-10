@@ -149,4 +149,16 @@ class Essays extends \yii\db\ActiveRecord
         
         return json_encode(["status" => "error"]);
     }
+	
+	public function canVote(){
+		$curWeek = \app\models\Weeks::getCurrentWeek(date('Y-m-d'));
+		$voteDate = date('Y-m-d' , strtotime($this->create_date . '+7 days'));
+		if($this->is_nominee && $voteDate > $curWeek['date_start'] && $voteDate < $curWeek['date_end']){
+			return true;
+		}
+		else{ 
+			return false;
+		}
+	}
+	
 }
