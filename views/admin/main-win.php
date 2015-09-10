@@ -32,6 +32,7 @@ $this->registerJs('
                 return false;
             }
         })
+		return false;
     })
     
     $("#adminCarousel").carousel("pause");

@@ -34,7 +34,7 @@ AppAsset::register($this);
             ['label' => 'Главная', 'url' => ['/site/index']],
             ['label' => 'Правила', 'url' => ['/site/about']],
             ['label' => 'Участвовать', 'url' => ['/site/login']],
-            ['label' => 'Галлерея', 'url' => ['/site/gallery']],
+            ['label' => 'Галерея', 'url' => ['/site/gallery']],
             ['label' => 'Победители', 'url' => ['/site/winners']],
             ['label' => 'Обратная связь', 'url' => ['/site/contact']]
         ]; 
