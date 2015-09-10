@@ -10,6 +10,7 @@ use app\models\LoginForm;
 use app\models\SignupForm;
 use app\models\ContactForm;
 use app\models\EssayForm;
+use app\models\Socials;
 
 class SiteController extends Controller
 {
@@ -63,7 +64,11 @@ class SiteController extends Controller
         }
         
         if ($loginForm->load(Yii::$app->request->post()) && $loginForm->login()) {
-            return $this->AddEssay();
+			if(Yii::$app->user->identity->isModerator() || Yii::$app->user->identity->isClient()){
+				return $this->redirect(["/admin/index"]);
+			}else{
+				return $this->AddEssay();
+			}
         }
         
         return $this->render('login', [
@@ -88,6 +93,68 @@ class SiteController extends Controller
         return $this->render('add-essay', [
             'model' => $essayForm
         ]);
+    }
+    
+    public function actionGallery()
+    {
+        $model = (new \yii\db\Query)
+            ->select([
+                "essays.*",
+                "weeks.*", 
+                "users.*", 
+                "essays.id as essay_id", 
+                "weeks.id as week_id", 
+                new \yii\db\Expression("case when votes_count.ct is NULL then 0 else votes_count.ct end as c_votes")
+            ])
+            ->from("essays")
+            ->innerJoin("users", "users.id = essays.user_id")
+            ->innerJoin("weeks", "essays.create_date between weeks.date_start and weeks.date_end")
+            ->leftJoin("(select votes.essay_id, count(votes.votes_id) as ct from votes group by votes.essay_id) as votes_count", "votes_count.essay_id = essays.id")
+            ->where("essays.is_nominee = 1")
+            ->andWhere("weeks.date_end <= :ndate", [":ndate" => date("Y-m-d")])
+            ->orderBy("essays.id")
+            ->all();
+			
+			$wEssays = [];
+			if(count($model) > 0){
+				foreach($model as $row){
+					$wEssays[$row['week_id']][] = $row;
+				}
+			}
+			
+		//echo "<pre>";print_r($wEssays);echo "</pre>";exit;
+        return $this->render('gallery', [
+            'wEssays' => $wEssays,
+        ]);
+    }
+    
+    public function actionVote()
+    { 
+		$request = Yii::$app->request;
+		$result = [];
+		if($request->get("code")){
+			switch($request->get("soc_type")){
+				case "fb":
+					$result = Socials::getFbinfoByCode($request->get("code"), \yii\helpers\Url::to(["site/vote", "soc_type" => $request->get("soc_type"),  "essay_id" => $request->get("essay_id")], true), $request->get("essay_id"));
+				break;
+				case "ok":
+					$result = Socials::getOkinfoByCode($request->get("code"), \yii\helpers\Url::to(["site/vote", "soc_type" => $request->get("soc_type"),  "essay_id" => $request->get("essay_id")], true), $request->get("essay_id"));
+				break;
+				case "vk":
+					$result = Socials::getVkinfoByCode($request->get("code"), \yii\helpers\Url::to(["site/vote", "soc_type" => $request->get("soc_type"),  "essay_id" => $request->get("essay_id")], true), $request->get("essay_id"));
+				break;
+			}
+			
+			return $this->renderPartial('social-result', $result);
+		}
+        
+        return $this->renderPartial('social-result', ["status" => "error", "text" => "ошибка авторизации"]);
+        
+    }
+
+    public function actionTest()
+    { 
+        return $this->render('test');
     }
     
     public function actionLogout()

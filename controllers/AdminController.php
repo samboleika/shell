@@ -91,7 +91,7 @@ class AdminController extends Controller
         $user_essays = (new \yii\db\Query)
             ->select("essays.*, users.*, essays.id as essay_id")
             ->from("users")
-            ->rightJoin('essays', 'essays.user_id = users.id')
+            ->innerJoin('essays', 'essays.user_id = users.id')
             ->where(['users.type' => 1]);
         
         if(Yii::$app->request->post('filter_status')){
@@ -99,7 +99,7 @@ class AdminController extends Controller
         }
         
         if(Yii::$app->request->post('filter_week')){
-            $user_essays->rightJoin('weeks', ["weeks.id" => Yii::$app->request->post('filter_week')]);
+            $user_essays->innerJoin('weeks', ["weeks.id" => Yii::$app->request->post('filter_week')]);
             $user_essays->andWhere("essays.create_date between weeks.date_start and weeks.date_end");
         }
         
@@ -123,7 +123,7 @@ class AdminController extends Controller
         $user_essays = (new \yii\db\Query)
             ->select("essays.*, users.*, essays.id as essay_id")
             ->from("users")
-            ->rightJoin('essays', 'essays.user_id = users.id and essays.status = 2')
+            ->innerJoin('essays', 'essays.user_id = users.id and essays.status = 2')
             ->where(['users.type' => 1]);
         
         if(Yii::$app->request->post('filter_status')){
@@ -131,7 +131,7 @@ class AdminController extends Controller
         }
         
         if(Yii::$app->request->post('filter_week')){
-            $user_essays->rightJoin('weeks', ["weeks.id" => Yii::$app->request->post('filter_week')]);
+            $user_essays->innerJoin('weeks', ["weeks.id" => Yii::$app->request->post('filter_week')]);
             $user_essays->andWhere("essays.create_date between weeks.date_start and weeks.date_end");
         }
         
@@ -170,7 +170,7 @@ class AdminController extends Controller
                     new \yii\db\Expression("case when essays.photo_path = '' then '' else CONCAT('".$_SERVER['SERVER_NAME'].Essays::ESSAY_PHOTOS_URL."', essays.photo_path) end"),
                     ])
                 ->from("users")
-                ->rightJoin('essays', 'essays.user_id = users.id and essays.status = 2')
+                ->innerJoin('essays', 'essays.user_id = users.id and essays.status = 2')
                 ->where(['users.type' => 1])
                 ->andWhere(['IN', 'essays.id', Yii::$app->request->post("essay_id")])
                 ->all();
@@ -190,7 +190,7 @@ class AdminController extends Controller
         $user_essays = (new \yii\db\Query)
             ->select("essays.*, users.*, essays.id as essay_id")
             ->from("users")
-            ->rightJoin('essays', 'essays.user_id = users.id and essays.status = 2')
+            ->innerJoin('essays', 'essays.user_id = users.id and essays.status = 2')
             ->where(['users.type' => 1]);
         
         if(Yii::$app->request->post('filter_status')){
@@ -198,7 +198,7 @@ class AdminController extends Controller
         }
         
         if(Yii::$app->request->post('filter_week')){
-            $user_essays->rightJoin('weeks', ["weeks.id" => Yii::$app->request->post('filter_week')]);
+            $user_essays->innerJoin('weeks', ["weeks.id" => Yii::$app->request->post('filter_week')]);
             $user_essays->andWhere("essays.create_date between weeks.date_start and weeks.date_end");
         }
         
@@ -237,7 +237,7 @@ class AdminController extends Controller
                     new \yii\db\Expression("case when essays.photo_path = '' then '' else CONCAT('".$_SERVER['SERVER_NAME'].Essays::ESSAY_PHOTOS_URL."', essays.photo_path) end"),
                     ])
                 ->from("users")
-                ->rightJoin('essays', 'essays.user_id = users.id and essays.status = 2')
+                ->innerJoin('essays', 'essays.user_id = users.id and essays.status = 2')
                 ->where(['users.type' => 1])
                 ->andWhere(['IN', 'essays.id', Yii::$app->request->post("essay_id")])
                 ->all();
@@ -256,11 +256,11 @@ class AdminController extends Controller
                 new \yii\db\Expression("count(case when essays.status = 3 then 1 else null end) as declined"),
             ])
             ->from("users")
-            ->rightJoin('essays', 'essays.user_id = users.id')
+            ->innerJoin('essays', 'essays.user_id = users.id')
             ->where(['users.type' => 1]);
         
         if(Yii::$app->request->post('filter_week')){
-            $user_essays->rightJoin('weeks', ["weeks.id" => Yii::$app->request->post('filter_week')]);
+            $user_essays->innerJoin('weeks', ["weeks.id" => Yii::$app->request->post('filter_week')]);
             $user_essays->andWhere("essays.create_date between weeks.date_start and weeks.date_end");
         }
         
