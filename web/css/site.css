@@ -171,3 +171,21 @@ a.desc:after {
     left: 0;
     width: 20px;
 }
+
+/*
+*   front gallery
+*/
+
+
+#essay-modal img,
+.frontCarusel .item img{
+    float: left;
+    max-width: 150px;
+    max-height: 150px;
+    padding: 5px 10px 5px 5px;
+}
+
+.carousel .item .essay-content{
+    height: 200px;
+    overflow: hidden;
+}
