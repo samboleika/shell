@@ -189,3 +189,23 @@ a.desc:after {
     height: 200px;
     overflow: hidden;
 }
+
+
+/*
+*   winners page
+*/
+
+.winners-table th,
+.winners-table td{
+    border-top: 1px solid #dadada;
+    border-left: 1px solid #dadada;
+    padding:5px;
+    text-align: center;
+}
+
+.winners-table th:last-child,
+.winners-table td:last-child,
+.winners-table tr:last-child td{
+    border-bottom: 1px solid #dadada;
+    border-right: 1px solid #dadada;
+}
