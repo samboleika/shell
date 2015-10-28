@@ -4,8 +4,10 @@ namespace app\models;
 
 use Yii;
 
-class Weeks extends yii\base\Model
+class Weeks extends \yii\base\Model
 {
+    const END_DATE = '2015-12-27';
+
     public static function getWeeks() {
         $weeks = (new \yii\db\Query)
             ->select(["weeks.*", "concat(date_start, ' - ', date_end) as period"])
@@ -29,6 +31,6 @@ class Weeks extends yii\base\Model
             ->one();
         
         return $week;
-    }
+    } 
     
 }

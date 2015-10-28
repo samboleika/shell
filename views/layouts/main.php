@@ -24,10 +24,6 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 	<section class="container">
         <header>
-            <div class="tagline">
-                <p>На пути к цели с Shell Rimula!</p>
-                <p>Участвуйте в акции от Shell Rimula в период с 2 ноября по 27 декабря 2015 года </p>					
-            </div>
             <div class="navi">
                 <ul>
                     <li><a href="/site/index" class="<?=(Yii::$app->request->url == '/site/index')?'active':''?>">Главная</a></li><li>

@@ -24,7 +24,7 @@ $this->registerJs("
           contentType: false
         }).done(function( data ) {
             if(data.status && data.status == 'ok'){
-                $('#result').html('<b>Спасибо!</b><br/><p>Твоя работа принята на модерацию.</p><p>По итогам модерации мы вышлем письмо на указанный</p><p>тобой адрес E-mail. Если твоя работа станет выигрышной,<p>Менеджеры свяжутся с тобой.</p>');
+                $('#result').html('Спасибо!<br/><p>Ваша заявка принята!</p><p>После прохождения модерации и в случае отбора вашей заявки для еженедельного голосования на сайте,<br/>мы свяжемся с Вами по телефону.</p>');
                 $.fancybox({
                     'href' : '#result',
                     'beforeClose': function() { document.location.href='".yii\helpers\Url::to("/")."' },
@@ -41,7 +41,7 @@ $this->registerJs("
     })
 ", yii\web\View::POS_READY);
 
-$this->title = 'Форма регистрации';
+//$this->title = 'Форма регистрации';
 ?>
 <div class="content-registration">
     <div class="img-wrapper">
@@ -82,7 +82,7 @@ $this->title = 'Форма регистрации';
     </div>
     
     <div class="input-item checkbox">
-        <input type="checkbox" name="agreement" id="checkbox" > <label for="checkbox">Я согласен с <a href="#">Правилами акции</a></label>
+        <input type="checkbox" name="agreement" id="checkbox" > <label for="checkbox">Я согласен с <a href="/files/shell_rimula_rules.pdf" target="_blank">Правилами акции</a></label>
     </div>		
     
     <div class="input-item">				

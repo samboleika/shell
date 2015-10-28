@@ -36,4 +36,14 @@ class ShellHelper extends \yii\base\Object {
         }
         fclose($output); 
     }
+    
+    public static function randomCode( $length = 8 ) {
+        $code = [];
+        for($i=0; $i<$length; $i++) {
+            $code[] = mt_rand(0, 9);
+        }
+        shuffle($code);
+        return join('', $code);        
+    }
+	
 }

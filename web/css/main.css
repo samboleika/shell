@@ -323,6 +323,10 @@ margin-bottom: 20px;
 .content-wins .img-wrapper img{
 	max-width:100%;
 }
+
+.content-wins p{
+	font-size: 11px;
+}
 table{
 	width: 100%;
 	font-size: 13px;

@@ -116,7 +116,7 @@ $this->registerJs('
 	
 ', yii\web\View::POS_HEAD);
 
-$this->title = 'Галерея';
+//$this->title = 'Галерея';
 ?>
 
 <div class="content-gallery">
@@ -134,18 +134,26 @@ $this->title = 'Галерея';
         <div class="gallery-wrapper" id="tabs">
             <div class="nav-gallery">
                 <ul>
-                    <?php foreach($wEssays as $key=>$uEssays):?>
-                        <li class="<?=($key == 1)?'active':'';?>"><a href="#week_<?=$key;?>" >Неделя <?=$key?></a></li>
+                    <?php 
+					$i = 0;
+					foreach($wEssays as $key=>$uEssays):
+					$i++;
+					?>
+                        <li class="<?=($i == 1)?'active':'';?>"><a href="#week_<?=$i;?>" >Неделя <?=$i?></a></li>
                     <?php endforeach;?>
                 </ul>
             </div>
 
-			<?php foreach($wEssays as $key=>$uEssays):?>
-				<div class="tabs-content swiper-container swiper<?=$key ;?>" id="week_<?=$key ;?>">
-                    <div class="swiper-button-next swiper-button-next<?=$key ;?>"></div>
-                    <div class="swiper-button-prev swiper-button-prev<?=$key ;?>"></div>
+			<?php 
+				$i = 0;
+				foreach($wEssays as $key=>$uEssays):
+				$i++;
+				?>
+				<div class="tabs-content swiper-container swiper<?=$i ;?>" id="week_<?=$i ;?>">
+                    <div class="swiper-button-next swiper-button-next<?=$i ;?>"></div>
+                    <div class="swiper-button-prev swiper-button-prev<?=$i ;?>"></div>
                     <div class="swiper-wrapper">
-                        <?php foreach ($uEssays as $key=>$essay):?>
+                        <?php foreach ($uEssays as $essay):?>
                         <div id="essay_<?=$essay['essay_id'];?>" class="swiper-slide" data-essay-id="<?=$essay['essay_id'];?>" data-essay-votes="<?=$essay['c_votes'];?>">
                             <div class="item-gallery">
                                 <div class="content-esse">
@@ -176,8 +184,7 @@ $this->title = 'Галерея';
     <div class="hidden">
 		<div id="auto-soc">
 			<p>
-				Авторизуйся через свою социальную сеть, <br>
-				чтобы проголосовать за работу
+				Пожалуйста, авторизуйтесь через удобную Вам социальную сеть, чтобы проголосовать за понравившуюся работу участника акции.
 			</p>
 			<div class="item-soc">
 				<a href="#" class="items-soc" id="fb_vote"></a>

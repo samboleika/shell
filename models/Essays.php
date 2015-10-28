@@ -65,6 +65,11 @@ class Essays extends \yii\db\ActiveRecord
         return isset($statuses[$id])?$statuses[$id]:0;
     }
     
+    public  function getUser() {
+		$user = User::find()->where(['users.id' => $this->user_id])->one();
+		return $user;
+    } 
+	
     public static function getPhoto($path) {
         $photo = self::ESSAY_PHOTO_PATH . $path;
         if(file_exists($photo) && $path != ""){
@@ -88,7 +93,7 @@ class Essays extends \yii\db\ActiveRecord
     
     //номинирование эссе
     public static function setNominee($id) {
-        $essay = Essays::findOne($id);
+        $essay = self::findOne($id);
         
         if(!empty($essay)){
 			//проверка на  кол-во уже наминированных, не больше 5 должно быть
@@ -118,6 +123,9 @@ class Essays extends \yii\db\ActiveRecord
 			
 			$essay->is_nominee = 1;
 			if($essay->save()){
+				$phone = preg_replace("/[^0-9]/", "", $essay->user->phone);
+				Yii::$app->db->createCommand()->insert('sms.outbox', ['creator_id_fk' => 1, 'source_number' => 'SHELLRIMULA',  'destination_number' => $phone, 'message_text' => "Ваша работа стала одной из лучших и примет участие в голосовании!" ])->execute();
+                   
 				return json_encode(["status" => "ok"]);
 			}
         }
@@ -139,7 +147,7 @@ class Essays extends \yii\db\ActiveRecord
             if(!$nomanees || $nomanees["count"] < 5){
                 $essay->is_winner = 1;
                 if($essay->save()){
-                    return json_encode(["status" => "ok"]);
+					return json_encode(["status" => "ok"]);
                 }
             }
             else{
@@ -151,9 +159,13 @@ class Essays extends \yii\db\ActiveRecord
     }
 	
 	public function canVote(){
-		$curWeek = \app\models\Weeks::getCurrentWeek(date('Y-m-d'));
-		$voteDate = date('Y-m-d' , strtotime($this->create_date . '+7 days')); 
-		if($this->is_nominee && $voteDate > $curWeek['date_start'] && $voteDate <= $curWeek['date_end']){
+        $essay_in = (new \yii\db\Query)
+            ->from("weeks")
+            ->where(":date >= date_vote_start and :date <= date_vote_end", [":date" => date('Y-m-d')])
+            ->andWhere(":essay_date >= date_start and :essay_date <= date_end", [":essay_date" => $this->create_date])
+            ->one();
+        
+		if($this->is_nominee && !empty($essay_in)){
 			return true;
 		}
 		else{ 

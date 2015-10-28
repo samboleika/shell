@@ -18,14 +18,24 @@ $this->registerJs("
     })
 ", yii\web\View::POS_READY);
 
-$this->title = 'Победители';
+//$this->title = 'Победители';
 ?>
 
 <div class="content-wins">
-    <?php if(count($main_winners)):?>
     <div class="img-wrapper">
         <img src="/img/wins-main.jpg" alt="Победители">
     </div>
+    <p>
+        На данной странице вы сможете ознакомиться со всеми работами победителей акции «На пути к цели с Shell Rimula», которые приняли участие в народном голосовании и были выбраны лучшими по итогам каждой недели акции. Также по итогам акции мы разместим информацию о главных победителях, выбранных компетентным жюри, и «Шелл» поможет им в достижении целей!
+    </p>
+    
+    <?php if(count($main_winners) == 0 && count($weeks) == 0):?>
+    <p>
+        <b>Победители еще не определены</b>
+    </p>
+    <?php endif;?>
+    
+    <?php if(count($main_winners)):?>
     <div class="table">
         <h3>Победители заключительного этапа</h3>
         <table class="table-finish">

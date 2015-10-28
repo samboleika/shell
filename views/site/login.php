@@ -70,7 +70,7 @@ $this->registerJs("
 	
 ", yii\web\View::POS_READY);
 
-$this->title = 'Участовать';
+//$this->title = 'Участовать';
 
 ?>
 <div class="content-registration">
@@ -102,7 +102,7 @@ $this->title = 'Участовать';
                 'mask' => '+7 (999) 999-99-99',
                 'options' => ['placeholder' => '+7 (___) ___-__-__', 'class' => 'input-width-368'],
             ]) ?>
-            <?= $form->field($loginForm, 'password', ['inputOptions' => ['placeholder' => '******', 'class' => 'input-width-368']])->passwordInput()->label(false); ?>
+            <?= $form->field($loginForm, 'password', ['inputOptions' => ['placeholder' => 'Пароль', 'class' => 'input-width-368']])->passwordInput()->label(false); ?>
 
             <?= Html::submitButton('Вход', ['class' => 'input-width-368 submit', 'name' => 'login-button']) ?>
 
@@ -148,7 +148,7 @@ $this->title = 'Участовать';
             <?= $form->field($signupForm, 'password', ['inputOptions' => ['placeholder' => 'Введите пароль', 'class' => 'input-width-368']])->passwordInput()->label(false); ?>
             <?= $form->field($signupForm, 'password_repeat', ['inputOptions' => ['placeholder' => 'Подтвердите пароль', 'class' => 'input-width-368']])->passwordInput()->label(false); ?>
             <div class="input-item checkbox">
-                <input type="checkbox" name="agreement" id="agreement_check"> <label for="checkbox">Я согласен с <a href="#">Правилами акции</a></label>
+                <input type="checkbox" name="agreement" id="agreement_check"> <label for="checkbox">Я согласен с <a href="/files/shell_rimula_rules.pdf" target="_blank">Правилами акции</a></label>
             </div>
         
             <?= Html::submitButton('Зарегистрироваться', ['class' => 'input-width-368 submit', 'name' => 'signup-button', 'id' => 'signup-button', 'disabled' => 'disabled']) ?>

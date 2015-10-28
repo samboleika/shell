@@ -57,7 +57,11 @@ class SiteController extends Controller
     }
 
     public function actionLogin() {
-		
+        $endDate = \app\models\Weeks::END_DATE;
+		if(date('Y-m-d') > $endDate){
+            return $this->render('unavailable', ['endDate' => $endDate]);
+        }
+        
         if (Yii::$app->request->isAjax && Yii::$app->request->get('sendCodePhone')) {
 			return $this->sendCodePhone(Yii::$app->request->get('sendCodePhone'));
         }
@@ -101,8 +105,8 @@ class SiteController extends Controller
             ->innerJoin("weeks", "essays.create_date::date between weeks.date_start and weeks.date_end")
             ->leftJoin("(select votes.essay_id, count(votes.votes_id) as ct from votes group by votes.essay_id) as votes_count", "votes_count.essay_id = essays.id")
             ->where("essays.is_nominee = 1")
-            ->andWhere("weeks.date_end <= :ndate", [":ndate" => date("Y-m-d")])
-            ->orderBy("essays.id")
+            ->andWhere("weeks.date_vote_start <= :ndate", [":ndate" => date("Y-m-d")])
+            ->orderBy("weeks.id, essays.id")
             ->all();
 			
 			$wEssays = [];
@@ -167,7 +171,7 @@ class SiteController extends Controller
                 "weeks.*"
             ])
             ->from("weeks")
-            ->andWhere("date_end <= :ndate", [":ndate" => date('Y-m-d' , strtotime('-7 days'))])
+            ->andWhere("date_vote_end < :ndate", [":ndate" => date('Y-m-d')])
             ->orderBy("id")
             ->all();
         

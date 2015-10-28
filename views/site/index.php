@@ -2,7 +2,7 @@
 
 /* @var $this yii\web\View */
 
-$this->title = 'Главная';
+//$this->title = 'Главная';
 ?>
 
 <div class="content-index">
@@ -20,7 +20,7 @@ $this->title = 'Главная';
         <p><strong>Поэтому мы рады пригласить вас к участию в акции «На пути к цели с Shell Rimula»!</strong></p>
         <a href="/site/login" class="button">Участвовать</a>
         <p><strong>Сроки проведения акции:</strong></p>
-        <p>c 13 октября по 13 декабря 2015 г.</p>
+        <p>с 2 ноября по 27 декабря 2015 г.</p>
         <a href="/site/about" class="actions">Ознакомиться подробнее с правилами акции</a>
     </div>
 </div>

@@ -11,7 +11,7 @@
 }
 
 /* Small Devices, Tablets */
-@media only screen and (max-width : 768px) {
+@media only screen and (max-width : 750px) {
 .navi ul li{
 	display: block;
 	width: 100%;
