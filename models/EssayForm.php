@@ -29,7 +29,7 @@ class EssayForm extends Model
 
     public function saveEssay() {
         $essay = new Essays;
-        $essay->text = htmlentities($this->text);
+        $essay->text = htmlentities($this->text, ENT_NOQUOTES);
         $essay->user_id = Yii::$app->user->id;
         $essay->create_date = date("Y-m-d H:i:s");
         $photo = UploadedFile::getInstancesByName('photo');

@@ -49,7 +49,7 @@ $this->title = 'Участники';
                 <tr>
                     <td><?=$user['lastname'];?></td>
                     <td><?=$user['firstname'];?></td>
-                    <td><?=date("d.m.Y", strtotime($user['birth_date']));?></td>
+                    <td><?=date("Y", strtotime($user['birth_date']));?></td>
                     <td><?=$user['phone'];?></td>
                     <td><?=$user['city'];?></td>
                     <td><?=($user['date_create'])?date("d.m.Y", strtotime($user['date_create'])):'';?></td>

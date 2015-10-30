@@ -36,8 +36,7 @@ class Essays extends \yii\db\ActiveRecord
             [['user_id', 'status', 'is_nominee', 'is_winner'], 'integer'],
             [['photo_path'], 'string', 'max' => 255],
             [['text'], 'string', 'max' => 1000],
-            ['create_date', 'safe'],
-            [['text'], 'filter', 'filter'=>'htmlspecialchars']
+            ['create_date', 'safe']
         ];
     }
 

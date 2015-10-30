@@ -32,6 +32,9 @@ class ShellHelper extends \yii\base\Object {
         print "\xEF\xBB\xBF"; // utf-8 BOM
         $output = fopen("php://output", "w");
         foreach ($data as $row) {
+			foreach ($row as $key=>$value) {
+				$row[$key] = html_entity_decode($value);
+			}
             fputcsv($output, $row, ";");
         }
         fclose($output); 

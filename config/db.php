@@ -5,5 +5,5 @@ return [
     'dsn' => 'pgsql:host=localhost;port=5432;dbname=shell-dev',
     'username' => 'postgres',
     'password' => 'postgres',
-    'charset' => 'utf8',
+    'charset' => 'utf8'
 ];
