@@ -68,9 +68,10 @@ $this->registerJs("
 			})
 	})
 	
+    
 ", yii\web\View::POS_READY);
 
-//$this->title = 'Участовать';
+$this->title = 'Участовать';
 
 ?>
 <div class="content-registration">
@@ -104,7 +105,7 @@ $this->registerJs("
             ]) ?>
             <?= $form->field($loginForm, 'password', ['inputOptions' => ['placeholder' => 'Пароль', 'class' => 'input-width-368']])->passwordInput()->label(false); ?>
 
-            <?= Html::submitButton('Вход', ['class' => 'input-width-368 submit', 'name' => 'login-button']) ?>
+            <?= Html::submitButton('Вход', ['class' => 'input-width-368 submit login-button', 'name' => 'login-button']) ?>
 
         <?php ActiveForm::end(); ?>
 
@@ -134,7 +135,8 @@ $this->registerJs("
                 'clientOptions' => [
                     'changeMonth' => true,
                     'changeYear' => true,
-                    'yearRange' => "-100:+0"
+                    'yearRange' => "-100:-18",
+                    'defaultDate' => "-25y"
                 ],
             ]) ?>
             <?= $form->field($signupForm, 'city', ['inputOptions' => ['placeholder' => 'Город', 'class' => 'input-width-368']])->label(false); ?>
@@ -148,10 +150,10 @@ $this->registerJs("
             <?= $form->field($signupForm, 'password', ['inputOptions' => ['placeholder' => 'Введите пароль', 'class' => 'input-width-368']])->passwordInput()->label(false); ?>
             <?= $form->field($signupForm, 'password_repeat', ['inputOptions' => ['placeholder' => 'Подтвердите пароль', 'class' => 'input-width-368']])->passwordInput()->label(false); ?>
             <div class="input-item checkbox">
-                <input type="checkbox" name="agreement" id="agreement_check"> <label for="checkbox">Я согласен с <a href="/files/shell_rimula_rules.pdf" target="_blank">Правилами акции</a></label>
+                <input type="checkbox" name="agreement" id="agreement_check"> <label for="checkbox">Я согласен с <a href="/files/shell_rimula_rules.pdf" download="shell_rimula_rules.pdf" target="_blank">Правилами акции</a></label>
             </div>
         
-            <?= Html::submitButton('Зарегистрироваться', ['class' => 'input-width-368 submit', 'name' => 'signup-button', 'id' => 'signup-button', 'disabled' => 'disabled']) ?>
+            <?= Html::submitButton('Зарегистрироваться', ['class' => 'input-width-368 submit signup-button', 'name' => 'signup-button', 'id' => 'signup-button', 'disabled' => 'disabled']) ?>
 
         <?php ActiveForm::end(); ?>
     </div>

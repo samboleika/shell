@@ -4,7 +4,7 @@
 
 use yii\helpers\Html;
 
-//$this->title = 'Правила';
+$this->title = 'Правила';
 
 ?>
 
@@ -68,7 +68,7 @@ use yii\helpers\Html;
     </div>
     <div class="text-wrapper-2">
         <p>
-			<a href="/files/shell_rimula_rules.pdf" target="_blank" class="actions">С более подробными правилами проведения акции вы можете ознакомиться здесь</a>
+			<a href="/files/shell_rimula_rules.pdf" target="_blank" class="actions" download="shell_rimula_rules.pdf">С более подробными правилами проведения акции вы можете ознакомиться здесь</a>
 		</p>
         <p>* Обязательно сохраняйте чек на протяжении всей акции! К участию в голосовании приглашаются только авторы работ,
             предоставившие копию чека, подтверждающего покупку одного из продуктов Shell Rimula R5 или R6.</p>

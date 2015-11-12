@@ -41,7 +41,27 @@ $this->registerJs("
     })
 ", yii\web\View::POS_READY);
 
-//$this->title = 'Форма регистрации';
+
+if($redirect == 'login'){
+	$this->registerJs(" 
+		window.digitalData.loginEvent = {
+			loginEvent: 'login'
+		};
+		_satellite.track('loginEvent');
+		window.digitalData.loginEvent = {};
+	", yii\web\View::POS_READY);
+}
+elseif($redirect == 'register'){
+	$this->registerJs(" 
+		window.digitalData.registrationEvent = {
+			registrationEvent: 'registration'
+		};
+		_satellite.track('registrationEvent');
+		window.digitalData.registrationEvent = {};
+	", yii\web\View::POS_READY);
+}
+
+$this->title = 'Форма регистрации';
 ?>
 <div class="content-registration">
     <div class="img-wrapper">
@@ -82,7 +102,7 @@ $this->registerJs("
     </div>
     
     <div class="input-item checkbox">
-        <input type="checkbox" name="agreement" id="checkbox" > <label for="checkbox">Я согласен с <a href="/files/shell_rimula_rules.pdf" target="_blank">Правилами акции</a></label>
+        <input type="checkbox" name="agreement" id="checkbox" > <label for="checkbox">Я согласен с <a href="/files/shell_rimula_rules.pdf" target="_blank" download="shell_rimula_rules.pdf">Правилами акции</a></label>
     </div>		
     
     <div class="input-item">				

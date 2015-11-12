@@ -14,6 +14,7 @@ use app\models\Socials;
 
 class SiteController extends Controller
 {
+    
     public function behaviors()
     {
         return [
@@ -36,6 +37,12 @@ class SiteController extends Controller
             ],
         ];
     }
+    
+    public function beforeAction($action)
+    {            
+        Yii::$app->controller->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
 
     public function actions()
     {
@@ -56,12 +63,16 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
-    public function actionLogin() {
+    public function actionLogin() { 
         $endDate = \app\models\Weeks::END_DATE;
 		if(date('Y-m-d') > $endDate){
             return $this->render('unavailable', ['endDate' => $endDate]);
         }
         
+        if (!\Yii::$app->user->isGuest) {
+            return $this->AddEssay();
+        }
+		
         if (Yii::$app->request->isAjax && Yii::$app->request->get('sendCodePhone')) {
 			return $this->sendCodePhone(Yii::$app->request->get('sendCodePhone'));
         }
@@ -70,16 +81,16 @@ class SiteController extends Controller
         }
 		
         $signupForm = new SignupForm();
-        $loginForm = new LoginForm();
-        if (!\Yii::$app->user->isGuest || $signupForm->load(Yii::$app->request->post()) && $signupForm->signup()) {
-            return $this->AddEssay();
+        if ($signupForm->load(Yii::$app->request->post()) && $signupForm->signup()) {
+            return $this->AddEssay('register');
         }
         
+        $loginForm = new LoginForm();
         if ($loginForm->load(Yii::$app->request->post()) && $loginForm->login()) {
 			if(Yii::$app->user->identity->isModerator() || Yii::$app->user->identity->isClient()){
 				return $this->redirect(["/admin/index"]);
 			}else{
-				return $this->AddEssay();
+				return $this->AddEssay('login');
 			}
         }
         
@@ -113,11 +124,14 @@ class SiteController extends Controller
 			if(count($model) > 0){
 				foreach($model as $row){
 					$wEssays[$row['week_id']][] = $row;
+					$weeks[$row['week_id']]['date_vote_start'] = $row['date_vote_start'];
+					$weeks[$row['week_id']]['date_vote_end'] = $row['date_vote_end'];
 				}
 			}
 			
         return $this->render('gallery', [
             'wEssays' => $wEssays,
+            'weeks' => $weeks,
         ]);
     }
     
@@ -235,7 +249,7 @@ class SiteController extends Controller
     }
 	
 	/* helper functions*/
-    public function AddEssay() {
+    public function AddEssay($redirect = '') {
         $essayForm = new EssayForm();
         
         if (Yii::$app->request->isAjax && $essayForm->load(Yii::$app->request->post())) {
@@ -249,7 +263,8 @@ class SiteController extends Controller
         }
         
         return $this->render('add-essay', [
-            'model' => $essayForm
+            'model' => $essayForm,
+			'redirect' => $redirect
         ]);
     }
     

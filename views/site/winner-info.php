@@ -2,7 +2,7 @@
 use app\models\Essays;
 ?>
 <div class="title-esse">
-    <p><strong><?=$winner['firstname']?></strong> / <?=$winner['city']?> / <?=app\models\User::getYearsOld($winner['birth_date'])?> года</p>
+    <p><strong><?=$winner['firstname']?></strong> / <?=$winner['city']?> / <?=app\models\User::getYearsOld($winner['birth_date'])?> <?= app\components\ShellHelper::YearTextArg(app\models\User::getYearsOld($winner['birth_date']))?></p>
 </div>
 <div class="text-esse <?=(Essays::getPhoto($winner['photo_path']))?'':'without-foto'?>">
     <div class="fleft">

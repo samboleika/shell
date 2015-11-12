@@ -28,6 +28,7 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'js/common.js',
+        'js/datalayer.js',
         'libs/fancybox/jquery.fancybox.pack.js',
         'libs/jquery-ui/jquery-ui.js',
         'libs/jquery.waypoints.min.js',

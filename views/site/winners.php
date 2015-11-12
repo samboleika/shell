@@ -18,11 +18,11 @@ $this->registerJs("
     })
 ", yii\web\View::POS_READY);
 
-//$this->title = 'Победители';
+$this->title = 'Победители';
 ?>
 
 <div class="content-wins">
-    <div class="img-wrapper">
+    <div class="img-wrapper" style="display: none">
         <img src="/img/wins-main.jpg" alt="Победители">
     </div>
     <p>
@@ -48,7 +48,7 @@ $this->registerJs("
             <tbody>
                 <?php foreach ($main_winners as $main_winner):?>
                 <tr data-essay-id="<?=$main_winner['essays_id']?>">
-                    <td><?=$main_winner['firstname']?>, <?=app\models\User::getYearsOld($main_winner['birth_date'])?> года, <?=$main_winner['city']?></td>
+                    <td><?=$main_winner['firstname']?>, <?=app\models\User::getYearsOld($main_winner['birth_date'])?> <?= app\components\ShellHelper::YearTextArg(app\models\User::getYearsOld($main_winner['birth_date']))?>, <?=$main_winner['city']?></td>
                     <td><a href="#" class="open_essay btn btn-link">Ссылка на работу</a></td>
                 </tr>
                 <?php endforeach;?>
@@ -76,7 +76,7 @@ $this->registerJs("
                 ?>
                 <tr data-essay-id="<?=$winner['essay_id']?>">
                     <td>Неделя <?=$week['id']?></td>
-                    <td><?=$winner['firstname']?>, <?=app\models\User::getYearsOld($winner['birth_date'])?> года, <?=$winner['city']?></td>
+                    <td><?=$winner['firstname']?>, <?=app\models\User::getYearsOld($winner['birth_date'])?> <?= app\components\ShellHelper::YearTextArg(app\models\User::getYearsOld($winner['birth_date']))?>, <?=$winner['city']?></td>
                     <td><a href="#" class="open_essay btn btn-link">Ссылка на работу</a></td>
                 </tr>
                 <?php 

@@ -116,20 +116,11 @@ $this->registerJs('
 	
 ', yii\web\View::POS_HEAD);
 
-//$this->title = 'Галерея';
+$this->title = 'Голосование';
 ?>
 
 <div class="content-gallery">
 	<?php if(count($wEssays) > 0):?>
-	
-        <div class="img-wrapper">
-            <img src="/img/galery-main.jpg" alt="Фото машины">
-        </div>
-        <div class="text-wrapper">
-            <p><strong>
-                Рады приветствовать вас на нашей странице голосования! Еженедельно вы можете ознакомиться здесь с лучшими конкурсными работами, прошедшими специальный отбор,  проголосовать за наиболее интересный рассказ и поддержать участников программы на их пути к достижению своих целей вместе с Shell Rimula.
-            </strong></p>
-        </div>
     
         <div class="gallery-wrapper" id="tabs">
             <div class="nav-gallery">
@@ -139,7 +130,7 @@ $this->registerJs('
 					foreach($wEssays as $key=>$uEssays):
 					$i++;
 					?>
-                        <li class="<?=($i == 1)?'active':'';?>"><a href="#week_<?=$i;?>" >Неделя <?=$i?></a></li>
+                        <li class="<?=($i == 1)?'active':'';?>"><a href="#week_<?=$i;?>" >Неделя<br/>с <?=date('d.m.Y', strtotime($weeks[$key]['date_vote_start']));?> по <?=date('d.m.Y', strtotime($weeks[$key]['date_vote_end']));?></a></li>
                     <?php endforeach;?>
                 </ul>
             </div>
@@ -158,7 +149,7 @@ $this->registerJs('
                             <div class="item-gallery">
                                 <div class="content-esse">
                                     <div class="title-esse">
-                                        <p><strong><?=$essay['firstname']?></strong> / <?=$essay['city']?> / <?=app\models\User::getYearsOld($essay['birth_date'])?> года</p>
+                                        <p><strong><?=$essay['firstname']?></strong> / <?=$essay['city']?> / <?=app\models\User::getYearsOld($essay['birth_date'])?> <?= app\components\ShellHelper::YearTextArg(app\models\User::getYearsOld($essay['birth_date']))?></p>
                                     </div>
                                     <div class="text-esse <?=(Essays::getPhoto($essay['photo_path']))?'':'without-foto'?>">
                                         <div class="fleft">
@@ -215,6 +206,14 @@ $this->registerJs('
 	</div>
     
 	<?php else:?>
-		<p>Нет работ</p>
+        <div class="img-wrapper">
+            <img src="/img/galery-main.jpg" alt="Фото машины">
+        </div>
+        <div class="text-wrapper">
+            <p><strong>
+                Рады приветствовать вас на нашей странице голосования! Еженедельно вы можете ознакомиться здесь с лучшими конкурсными работами, прошедшими специальный отбор,  проголосовать за наиболее интересный рассказ и поддержать участников программы на их пути к достижению своих целей вместе с Shell Rimula.
+            </strong></p>
+        </div>
+		<p>На данный момент идет сбор заявок</p>
 	<?php endif;?>
 </div>
