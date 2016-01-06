@@ -185,7 +185,7 @@ class SiteController extends Controller
                 "weeks.*"
             ])
             ->from("weeks")
-            ->andWhere("date_vote_end < :ndate", [":ndate" => date('Y-m-d')])
+            ->andWhere("date_vote_end <= :ndate", [":ndate" => date('Y-m-d')])
             ->orderBy("id")
             ->all();
         

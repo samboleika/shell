@@ -112,7 +112,7 @@ class Essays extends \yii\db\ActiveRecord
                 ->select("essays.id")
                 ->from("essays")
 				->rightJoin("users", ["users.id" => $essay->user_id])
-                ->rightJoin("weeks",":date between weeks.date_start and weeks.date_end", [":date" => $essay->create_date])
+                ->rightJoin("weeks",":date between weeks.date_start and weeks.date_end and :date <> weeks.date_end", [":date" => $essay->create_date])
                 ->where("essays.create_date::date  between weeks.date_start and weeks.date_end and essays.is_nominee = 1 and essays.user_id = users.id")
                 ->one();
 				
@@ -160,8 +160,8 @@ class Essays extends \yii\db\ActiveRecord
 	public function canVote(){
         $essay_in = (new \yii\db\Query)
             ->from("weeks")
-            ->where(":date >= date_vote_start and :date <= date_vote_end", [":date" => date('Y-m-d')])
-            ->andWhere(":essay_date >= date_start and :essay_date <= date_end", [":essay_date" => $this->create_date])
+            ->where(":date >= date_vote_start and :date < date_vote_end", [":date" => date('Y-m-d')])
+            ->andWhere(":essay_date >= date_start and :essay_date <= date_end", [":essay_date" => date('Y-m-d', strtotime($this->create_date))])
             ->one();
         
 		if($this->is_nominee && !empty($essay_in)){

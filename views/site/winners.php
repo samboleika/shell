@@ -11,7 +11,7 @@ $this->registerJs("
             data: 'essay_id=' + item.attr('data-essay-id'),
             success: function( data ) {
                 $('#openwins .content-esse').html(data);
-                $.fancybox({'href' : '#openwins'});
+                $.fancybox({'href' : '#openwins',  topRatio :0});
             }
         });
         return false;
@@ -22,8 +22,8 @@ $this->title = 'Победители';
 ?>
 
 <div class="content-wins">
-    <div class="img-wrapper" style="display: none">
-        <img src="/img/wins-main.jpg" alt="Победители">
+    <div class="img-wrapper">
+        <img src="/img/shell_winners.jpg" alt="Победители">
     </div>
     <p>
         На данной странице вы сможете ознакомиться со всеми работами победителей акции «На пути к цели с Shell Rimula», которые приняли участие в народном голосовании и были выбраны лучшими по итогам каждой недели акции. Также по итогам акции мы разместим информацию о главных победителях, выбранных компетентным жюри, и «Шелл» поможет им в достижении целей!
@@ -92,7 +92,7 @@ $this->title = 'Победители';
 <!-- essay-modal -->
 <div class="hidden">
     <div id="openwins">
-        <div class="img-main-fancybox">
+        <div class="img-main-fancybox" style="display:none">
             <img src="/img/wins-main-fancybox.jpg" alt="">
         </div>
         <div class="content-esse">            

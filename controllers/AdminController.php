@@ -187,7 +187,9 @@ class AdminController extends Controller
                 ->select([
                     "users.lastname", 
                     "users.firstname", 
+                    "users.city", 
                     "users.phone", 
+                    "users.birth_date", 
                     "essays.create_date", 
                     "essays.text", 
                     new \yii\db\Expression("case when essays.is_nominee = 1 then 'номинант' else '' end"), 
@@ -198,7 +200,19 @@ class AdminController extends Controller
                 ->where(['users.type' => 1])
                 ->andWhere(['IN', 'essays.id', Yii::$app->request->post("essay_id")])
                 ->all();
-            return \app\components\ShellHelper::exportCsv($user_essays);
+				
+				$info = [];
+				
+				foreach($user_essays as $user_essay_key=>$user_essay_attrs){
+					foreach($user_essay_attrs as $key=>$value){
+						if($key == 'birth_date'){
+							$value = floor((time() - strtotime($value))/31556926);
+						}
+						$info_attrs[$key] = $value;
+					}
+					$info[$user_essay_key] = $info_attrs;
+				}
+            return \app\components\ShellHelper::exportCsv($info);
         }
         print "Выберите хотя бы одну строку";
         return false;
@@ -254,7 +268,9 @@ class AdminController extends Controller
                 ->select([
                     "users.lastname", 
                     "users.firstname", 
+                    "users.city", 
                     "users.phone", 
+                    "users.birth_date", 
                     "essays.create_date", 
                     "essays.text", 
                     new \yii\db\Expression("case when essays.is_winner = 1 then 'победитель' else '' end"), 
@@ -265,7 +281,19 @@ class AdminController extends Controller
                 ->where(['users.type' => 1])
                 ->andWhere(['IN', 'essays.id', Yii::$app->request->post("essay_id")])
                 ->all();
-            return \app\components\ShellHelper::exportCsv($user_essays);
+				$info = [];
+				
+				foreach($user_essays as $user_essay_key=>$user_essay_attrs){
+					foreach($user_essay_attrs as $key=>$value){
+						if($key == 'birth_date'){
+							$value = floor((time() - strtotime($value))/31556926);
+						}
+						$info_attrs[$key] = $value;
+					}
+					$info[$user_essay_key] = $info_attrs;
+				}
+				
+            return \app\components\ShellHelper::exportCsv($info);
         }
         print "Выберите хотя бы одну строку";
         return false;
@@ -295,4 +323,19 @@ class AdminController extends Controller
         
     }
 
+	//добавление фото к ессэ
+    public function actionEssayphoto() {
+        $essayForm = new \app\models\EssayPhotoForm();
+        
+        if (Yii::$app->request->isAjax && $essayForm->load(Yii::$app->request->post())) {
+            if($essayForm->updatePhotoEssay()){
+                return json_encode(["status" => "ok", "text" => "фото успешно добавлено", "imgSrc" => Essays::getPhoto($essayForm->photo_path)]);
+            }
+            else{
+				return json_encode(["status" => "error",  "text" => "не получилось добавить фото, возможно неверный формат, только: jpg, png, jpeg, размер файла максимум: 3MB"]);
+            }
+        }
+        
+		return json_encode(["status" => "error",  "text" => "неверный запрос"]);
+    }
 }

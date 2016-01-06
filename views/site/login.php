@@ -68,6 +68,16 @@ $this->registerJs("
 			})
 	})
 	
+	$('.utf_validate').on('keypress', function(evt){
+		var theEvent = evt || window.event;
+		  var key = theEvent.keyCode || theEvent.which;
+		  key = String.fromCharCode( key );
+		  var regex = /[А-Яа-яЁё]|\./;
+		  if( !regex.test(key) ) {
+			theEvent.returnValue = false;
+			if(theEvent.preventDefault) theEvent.preventDefault();
+		  }
+	})
     
 ", yii\web\View::POS_READY);
 
@@ -122,8 +132,8 @@ $this->title = 'Участовать';
 
             <h3>Зарегистрироваться</h3>
         
-            <?= $form->field($signupForm, 'lastname', ['inputOptions' => ['placeholder' => 'Фамилия', 'class' => 'input-width-368']])->label(false); ?>
-            <?= $form->field($signupForm, 'firstname', ['inputOptions' => ['placeholder' => 'Имя', 'class' => 'input-width-368']])->label(false); ?>
+            <?= $form->field($signupForm, 'lastname', ['inputOptions' => ['placeholder' => 'Фамилия', 'class' => 'input-width-368 utf_validate']])->label(false); ?>
+            <?= $form->field($signupForm, 'firstname', ['inputOptions' => ['placeholder' => 'Имя', 'class' => 'input-width-368 utf_validate']])->label(false); ?>
             <?= $form->field($signupForm,'birth_date')->widget(yii\jui\DatePicker::className(),[
                 'language' => 'ru',
                 'dateFormat' => 'dd.MM.yyyy',
@@ -139,7 +149,7 @@ $this->title = 'Участовать';
                     'defaultDate' => "-25y"
                 ],
             ]) ?>
-            <?= $form->field($signupForm, 'city', ['inputOptions' => ['placeholder' => 'Город', 'class' => 'input-width-368']])->label(false); ?>
+            <?= $form->field($signupForm, 'city', ['inputOptions' => ['placeholder' => 'Город', 'class' => 'input-width-368 utf_validate']])->label(false); ?>
 			<?= $form->field($signupForm, 'phone')->widget(\yii\widgets\MaskedInput::className(), [
                 'mask' => '+7 (999) 999-99-99',
                 'options' => ['placeholder' => '+7 (___) ___-__-__', 'class' => 'input-width-368'],

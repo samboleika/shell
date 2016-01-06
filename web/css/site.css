@@ -209,3 +209,72 @@ a.desc:after {
     border-bottom: 1px solid #dadada;
     border-right: 1px solid #dadada;
 }
+
+
+.foto-esse input{
+	display: inline-block;
+	width: 170px;
+	margin-right: 20px;
+}
+.foto-esse label{
+	display: inline-block;
+	vertical-align: top;
+	font-size: 11px;
+	margin-top: 7px;
+	margin-left: 20px;
+	max-width:400px;
+}
+.fileform { 
+    background-color: #fff;
+		box-sizing:border-box;
+    cursor: pointer;
+    height: 60px;
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    vertical-align: top;
+    width: 170px;
+    display: inline-block;
+}
+.fileform:hover .selectbutton{
+	border:1px solid #dd1d21;
+}
+.fileform .selectbutton { 
+  background-color: #fff;
+  color: #333;
+  font-size: 13px;
+  height: 40px;
+  line-height: 40px;
+  overflow: hidden;
+  text-align: center;
+  float: left;
+  width: 170px;
+  border:1px solid #333;
+  box-sizing:border-box;
+	-webkit-transition: background-color 0.25s;
+	-o-transition: background-color 0.25s;
+	transition: background-color 0.25s;
+}
+.fileform .upload{
+  position:absolute; 
+  top:0; 
+  left:0; 
+  width:100%; 
+  -moz-opacity: 0; 
+  filter: alpha(opacity=0); 
+  opacity: 0; 
+  font-size: 150px; 
+  height: 30px; 
+  z-index:20;
+  cursor: pointer;
+}
+.fileform .fileformlabel { 
+	background-color: #fff;
+	float: left;
+	height: 20px;
+	line-height: 20px;
+	overflow: hidden;
+	text-align: left;
+	width:170px;
+	font-size: 11px;
+}

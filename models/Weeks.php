@@ -32,5 +32,15 @@ class Weeks extends \yii\base\Model
         
         return $week;
     } 
+	
+    public static function isCurrentVote($week_id) {
+        $week = (new \yii\db\Query)
+            ->from("weeks")
+            ->where(":date between date_vote_start and date_vote_end and :date <> date_vote_end", [":date" => date('Y-m-d')])
+			->andWhere(["id" => $week_id])
+            ->one();
+        
+        return (empty($week))?false:true;
+    } 
     
 }

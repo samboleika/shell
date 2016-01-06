@@ -1,6 +1,7 @@
 <?php
 use app\models\Essays;
 use app\models\Socials;
+use app\models\Weeks;
  
 $js_swipers = "";
 foreach($wEssays as $key=>$uEssays){
@@ -33,7 +34,7 @@ $this->registerJs('
             $("#openwins").find(".text-esse").removeClass("without-foto");
         }
         $("#essay_votes").html(item.attr("data-essay-votes"));
-        $.fancybox({"href" : "#openwins"});
+        $.fancybox({"href" : "#openwins",  topRatio :0});
         return false;
     })
 
@@ -102,6 +103,7 @@ $this->registerJs('
         var item = $("#essay_" + selected_essay_id);
         var c_votes = (parseFloat(item.attr("data-essay-votes")) + 1);
         item.attr("data-essay-votes", c_votes);
+        item.find(".count_votes").html(c_votes);
         $("#essay_votes").html(c_votes);
     }
 	
@@ -111,6 +113,7 @@ $this->registerJs('
 		}else{
             setVotePlus();
             $.fancybox.close();
+            $.fancybox({"href" : "#thanks"});
 		}
     }
 	
@@ -120,6 +123,14 @@ $this->title = 'Голосование';
 ?>
 
 <div class="content-gallery">
+	<div class="img-wrapper">
+		<img src="/img/galery-main.jpg" alt="Фото машины">
+	</div>
+	<div class="text-wrapper">
+		<p><strong>
+			Рады приветствовать вас на нашей странице голосования! Еженедельно вы можете ознакомиться здесь с лучшими конкурсными работами, прошедшими специальный отбор,  проголосовать за наиболее интересный рассказ и поддержать участников программы на их пути к достижению своих целей вместе с Shell Rimula.
+		</strong></p>
+	</div>
 	<?php if(count($wEssays) > 0):?>
     
         <div class="gallery-wrapper" id="tabs">
@@ -130,7 +141,7 @@ $this->title = 'Голосование';
 					foreach($wEssays as $key=>$uEssays):
 					$i++;
 					?>
-                        <li class="<?=($i == 1)?'active':'';?>"><a href="#week_<?=$i;?>" >Неделя<br/>с <?=date('d.m.Y', strtotime($weeks[$key]['date_vote_start']));?> по <?=date('d.m.Y', strtotime($weeks[$key]['date_vote_end']));?></a></li>
+                        <li class="<?=(Weeks::isCurrentVote($key))?'ui-tabs-active ui-state-active':'';?>"><a href="#week_<?=$i;?>" >Неделя<br/>с <?=date('d.m.Y', strtotime($weeks[$key]['date_vote_start']));?> по <?=date('d.m.Y', strtotime($weeks[$key]['date_vote_end']));?></a></li>
                     <?php endforeach;?>
                 </ul>
             </div>
@@ -149,7 +160,7 @@ $this->title = 'Голосование';
                             <div class="item-gallery">
                                 <div class="content-esse">
                                     <div class="title-esse">
-                                        <p><strong><?=$essay['firstname']?></strong> / <?=$essay['city']?> / <?=app\models\User::getYearsOld($essay['birth_date'])?> <?= app\components\ShellHelper::YearTextArg(app\models\User::getYearsOld($essay['birth_date']))?></p>
+                                        <p><strong><?=$essay['firstname']?></strong> / <?=$essay['city']?> / <?=app\models\User::getYearsOld($essay['birth_date'])?> <?= app\components\ShellHelper::YearTextArg(app\models\User::getYearsOld($essay['birth_date']))?> <?=($essay['c_votes'] > 0)?'<span style="float:right">Количество голосов: <span class="count_votes">'.$essay['c_votes'].'</span></span>':''?></p>
                                     </div>
                                     <div class="text-esse <?=(Essays::getPhoto($essay['photo_path']))?'':'without-foto'?>">
                                         <div class="fleft">
@@ -205,15 +216,15 @@ $this->title = 'Голосование';
 		</div>
 	</div>
     
+	<div class="hidden">
+		<div id="thanks">
+			<div class="content-esse">
+                <p class="text-center">Спасибо! Ваш голос принят!</p>
+			</div>
+		</div>
+	</div>
+    
 	<?php else:?>
-        <div class="img-wrapper">
-            <img src="/img/galery-main.jpg" alt="Фото машины">
-        </div>
-        <div class="text-wrapper">
-            <p><strong>
-                Рады приветствовать вас на нашей странице голосования! Еженедельно вы можете ознакомиться здесь с лучшими конкурсными работами, прошедшими специальный отбор,  проголосовать за наиболее интересный рассказ и поддержать участников программы на их пути к достижению своих целей вместе с Shell Rimula.
-            </strong></p>
-        </div>
 		<p>На данный момент идет сбор заявок</p>
 	<?php endif;?>
 </div>

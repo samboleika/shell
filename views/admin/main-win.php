@@ -4,6 +4,19 @@ use app\models\Weeks;
 use yii\widgets\LinkPager;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
+$this->registerJs('
+    function getName (that){
+        var str = that.value;
+        if (str.lastIndexOf("\\\")){
+            var i = str.lastIndexOf("\\\")+1;
+        }
+        else{
+            var i = str.lastIndexOf("/")+1;
+        }
+        $(that).closest(".essay-form").submit(); 
+    }
+', yii\web\View::POS_HEAD);
 
 $this->registerJs('
     $(".set_winner").on("click", function(){
@@ -60,8 +73,35 @@ $this->registerJs('
     
     $("#export_essays").on("click", function(){
         $("#essays-form").submit();
-    })
+    });
     
+    $(".essay-form").on("beforeSubmit", function(evt){
+        var that = this;
+        if($(this).find(".has-error").length) {
+            return false;
+        }
+        var fd = new FormData(this);
+        $.ajax({
+          url: $(that).attr("action"),
+          type: "POST",
+          data: fd,
+          dataType: "json",
+          enctype: "multipart/form-data",
+          processData: false,
+          contentType: false
+        }).done(function( data ) {
+            if(data.status && data.status == "ok"){
+                $(that).closest(".item").find(".essay-img-block").html("<img src=\'"+data.imgSrc+"\'>");
+            }
+            else if(data.text){
+                alert(data.text);
+            }
+            else{
+                alert("Произошла ошибка, фото не добавлено!");
+            }
+        });
+        return false;
+    })
 ', yii\web\View::POS_READY);
 
 $this->title = 'Главный розыгрыш';
@@ -132,16 +172,39 @@ $this->title = 'Главный розыгрыш';
                                             </b>
                                         </p>
                                         <p>
-                                            <?=(Essays::getPhoto($essay['photo_path']))?"<img src=".Essays::getPhoto($essay['photo_path']).">":"";?>
+                                            <div class="essay-img-block">
+                                                <?=(Essays::getPhoto($essay['photo_path']))?"<img src=".Essays::getPhoto($essay['photo_path']).">":"";?>
+                                            </div>
                                             <?=$essay['text']?>
                                         </p>
+										<hr style="clear:both"/>     
+										<?php $form = ActiveForm::begin([
+											'id' => 'essay-form-'.$essay['essay_id'],
+                                            'action' => Url::to('\admin\essayphoto'),
+											'options' => ['enctype'=>'multipart/form-data', 'class' => 'registr essay-form'],
+											'fieldConfig' => [
+												'template' => "<div class=\"form-group\">{input}</div>"
+											]
+										]); ?>
+                                            <input type="hidden" name="EssayPhotoForm[essay_id]" value="<?=$essay['essay_id']?>">
+                                            <div class="input-item foto-esse input-file">
+                                                <div class="fileform">
+                                                    <div class="selectbutton">Загрузить фото</div>
+                                                    <div class="fileformlabel"></div>
+                                                    <input type="file" name="EssayPhotoForm[photo]" class="upload" id="upload-<?=$essay['essay_id'];?>" onchange="getName(this);" />
+                                                </div>
+                                                <label for="upload-<?=$essay['essay_id'];?>">
+                                                    (файл в формате .JPG, не более 3МБ) .
+                                                </label>
+                                            </div>
+										<?php ActiveForm::end(); ?>
                                     </div>
                                 <?php endforeach;?>
                             </div>
-                            <a class="carousel-control left" href="#adminCarousel" data-slide="prev">
+                            <a class="carousel-control left" href="#adminCarousel" data-slide="prev" style="background:none;">
                               <span class="glyphicon glyphicon-chevron-left"></span>
                             </a>
-                            <a class="carousel-control right" href="#adminCarousel" data-slide="next">
+                            <a class="carousel-control right" href="#adminCarousel" data-slide="next" style="background:none;">
                               <span class="glyphicon glyphicon-chevron-right"></span>
                             </a>
                         </div>
